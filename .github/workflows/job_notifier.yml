@@ -1,0 +1,28 @@
+name: Job Notifier
+
+on:
+  schedule:
+    # Schedule the job to run at specified times
+    - cron: '0,30 8-19 * * *'  # Every 30 minutes from 08:00 to 19:30
+    - cron: '0,30 20 * * *'    # At 20:00 and 20:30
+
+jobs:
+  run-job-notifier:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Script
+        run: python job_notifier.py
