@@ -5,7 +5,7 @@ on:
     # Schedule the job to run at specified times
     - cron: '0,30 8-19 * * *'  # Every 30 minutes from 08:00 to 19:30
     - cron: '0,30 20 * * *'    # At 20:00 and 20:30
-    - cron: '45 23 * * *'       # At 21:00
+    - cron: '50 22 * * *'      # At 22:50
 
 jobs:
   run-job-notifier:
