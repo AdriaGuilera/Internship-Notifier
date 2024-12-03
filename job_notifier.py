@@ -79,6 +79,8 @@ def check_new_offers():
     save_offers(todayoffers)
 
 if __name__ == "__main__":
-    check_new_offers()
+
     if datetime.now().hour > 21:
         save_offers([])
+    else:
+        check_new_offers()
