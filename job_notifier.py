@@ -80,5 +80,5 @@ def check_new_offers():
 
 if __name__ == "__main__":
     check_new_offers()
-    if datetime.now().hour > 20:
+    if datetime.now().hour > 21:
         save_offers([])
