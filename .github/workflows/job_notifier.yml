@@ -1,11 +1,12 @@
 name: Job Notifier
 
 on:
-  schedule:
-    # Schedule the job to run at specified times
-    - cron: '0,30 7-19 * * *'  # Every 30 minutes from 08:00 to 19:30
-    - cron: '10 21 * * *'       # At 21:10
-    - cron: '* 22-23 * * *'     # Every minute from 22:00 to 23:59
+    workflow_dispatch: # Allows manual triggering
+    schedule:
+      - cron: '0,30 7-19 * * *'
+      - cron: '10 21 * * *'
+      - cron: '* 22-23 * * *'
+
 
 jobs:
   run-job-notifier:
