@@ -11,7 +11,7 @@ TWILIO_WHATSAPP_NUMBER = "whatsapp:+14155238886"
 MY_WHATSAPP_NUMBER = "whatsapp:+34685172041"
 
 # Absolute path for the offers file
-OFFERS_FILE_PATH = '/home/your_username/job_notifier/todayoffers.json'
+OFFERS_FILE_PATH = 'todayoffers.json'
 
 # Function to Send WhatsApp Message
 def send_whatsapp_message(message):
