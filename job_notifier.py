@@ -1,27 +1,29 @@
-from twilio.rest import Client
 import requests
 import json
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-# Twilio API Configuration
-TWILIO_ACCOUNT_SID = "AC9ab6fd78eec22b87541d798d38471ba2"
-TWILIO_AUTH_TOKEN = "00c490583148ff3d6baa534032df7fa1"
-TWILIO_WHATSAPP_NUMBER = "whatsapp:+14155238886"
-MY_WHATSAPP_NUMBER = "whatsapp:+34685172041"
+# Pushover API Configuration
+PUSHOVER_USER_KEY = "uqf6qvuwidzjpauuoyauh7vxarj9iq"  # Replace with your Pushover User Key
+PUSHOVER_API_TOKEN = "a4c94cnnjzjhtfkn65jumeqsszydcm"
 
 # Absolute path for the offers file
 OFFERS_FILE_PATH = 'todayoffers.json'
 
-# Function to Send WhatsApp Message
-def send_whatsapp_message(message):
-    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    message = client.messages.create(
-        body=message,
-        from_=TWILIO_WHATSAPP_NUMBER,
-        to=MY_WHATSAPP_NUMBER
-    )
-    print(f"Message sent: {message.sid}")
+# Function to Send Pushover Message
+def send_pushover_message(message, link):
+    url = "https://api.pushover.net:443/1/messages.json"
+    data = {
+        "token": PUSHOVER_API_TOKEN,
+        "user": PUSHOVER_USER_KEY,
+        "message": message,
+        "url": link
+    }
+    response = requests.post(url, data=data)
+    if response.status_code == 200:
+        print("Message sent to Pushover successfully.")
+    else:
+        print(f"Failed to send message. Status code: {response.status_code}")
 
 # Function to load offers from a JSON file
 def load_offers():
@@ -68,19 +70,19 @@ def check_new_offers():
                     if job not in todayoffers:
                         todayoffers.append(job)
                         linktxt = f"https://borsapractiques.fib.upc.edu/ca/ofertes/oferta/{link[-4:]}"
-
                         print(job)
                         print(location)
                         print(linktxt)
 
-                        message = f"*New Job Offer!*\n{job}\n{location}\n{linktxt}"
-                        send_whatsapp_message(message)
+                        message = f"New Job Offer!\n{job}\n{location}"
+
+                        send_pushover_message(message, linktxt)
 
     save_offers(todayoffers)
 
 if __name__ == "__main__":
 
-    if datetime.now().hour > 21:
+    if datetime.now().hour > 23:
         save_offers([])
     else:
         check_new_offers()
