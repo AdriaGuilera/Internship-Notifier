@@ -27,7 +27,7 @@ jobs:
       # Attempt to download the artifact
       - name: Check if todayoffers artifact exists and download
         id: download-artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: todayoffers
           path: ./  # Downloads the artifact to the current directory
@@ -38,7 +38,7 @@ jobs:
 
       # Upload the artifact if it doesn't exist or after the script is run
       - name: Upload todayoffers artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: todayoffers  # Artifact name
           path: todayoffers.json  # Path to the file to upload
