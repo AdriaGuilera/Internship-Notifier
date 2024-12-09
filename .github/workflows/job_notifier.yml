@@ -1,45 +1,43 @@
 name: Job Notifier
 
 on:
-  workflow_dispatch: 
-  schedule:
-    - cron: '0,30 9-19 * * *' 
-    - cron: '0 23 * * *'
+    workflow_dispatch:
+    schedule:
+      - cron: '0,30 9-19 * * *'
+      - cron: '0 23 * * *'
 
 jobs:
   run-job-notifier:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout Repository
-    uses: actions/checkout@v3
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-    uses: actions/setup-python@v4
-    with:
-      python-version: '3.9'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
-    - name: Install Dependencies
-    run: |
-      python -m pip install --upgrade pip
-      pip install -r requirements.txt
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Cache todayoffers
-    id: cache-todayoffers
-    uses: actions/cache@v3
-    with:
-      path: todayoffers.json
-      key: ${{ runner.os }}-todayoffers-${{ hashFiles('todayoffers.json') }}
-      restore-keys: |
-      ${{ runner.os }}-todayoffers-
+      - name: Cache todayoffers.json
+        id: cache-todayoffers
+        uses: actions/cache@v3
+        with:
+          path: todayoffers.json
+          key: todayoffers-cache
+        continue-on-error: true
 
-    - name: Run Script
-    run: python job_notifier.py
+      - name: Run Script
+        run: python job_notifier.py
 
-    - name: Save todayoffers to cache
-    if: steps.cache-todayoffers.outputs.cache-hit != 'true'
-    run: echo "Cache miss, saving todayoffers.json"
-    uses: actions/cache@v3
-    with:
-      path: todayoffers.json
-      key: ${{ runner.os }}-todayoffers-${{ hashFiles('todayoffers.json') }}
+      - name: Update todayoffers cache
+        if: steps.cache-todayoffers.outputs.cache-hit != 'true'
+        uses: actions/cache@v3
+        with:
+          path: todayoffers.json
+          key: todayoffers-cache
