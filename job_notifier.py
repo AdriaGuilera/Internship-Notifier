@@ -1,14 +1,10 @@
 import requests
-import json
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Pushover API Configuration
 PUSHOVER_USER_KEY = "uqf6qvuwidzjpauuoyauh7vxarj9iq"  # Replace with your Pushover User Key
 PUSHOVER_API_TOKEN = "a4c94cnnjzjhtfkn65jumeqsszydcm"
-
-# Absolute path for the offers file
-OFFERS_FILE_PATH = 'todayoffers.json'
 
 # Function to Send Pushover Message
 def send_pushover_message(message, link):
@@ -25,31 +21,9 @@ def send_pushover_message(message, link):
     else:
         print(f"Failed to send message. Status code: {response.status_code}")
 
-# Function to load offers from a JSON file
-def load_offers():
-    try:
-        with open(OFFERS_FILE_PATH, 'r') as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return []
-
-# Function to save offers to a JSON file
-def save_offers(offers):
-    with open(OFFERS_FILE_PATH, 'w') as file:
-        json.dump(offers, file)
-
-def clean_offers():
-    try:
-        with open(OFFERS_FILE_PATH, 'w') as file:
-            json.dump([], file)
-    except FileNotFoundError:
-        return []
-
 # Function to Check New Job Offers
 def check_new_offers():
-    todayoffers = load_offers()
-
-    for i in range(0, 3):
+    for i in range(0, 2):
         URL = "https://borsapractiques.fib.upc.edu/ca/ofertes_ltd?page=" + str(i)
         response = requests.get(URL)
         if response.status_code != 200:
@@ -63,26 +37,17 @@ def check_new_offers():
             location_element = offer.select_one('.views-field.views-field-address__administrative-area')
 
             if date_element and job_element and location_element:
-                if date_element.text == datetime.now().strftime('%d/%m/%Y'):
-                    job = job_element.text.strip()
-                    link = job_element['href']
-                    location = location_element.text.strip()
-                    if job not in todayoffers:
-                        todayoffers.append(job)
-                        linktxt = f"https://borsapractiques.fib.upc.edu/ca/ofertes/oferta/{link[-4:]}"
+                date = datetime.fromisoformat(date_element['datetime'])
+                if date.strftime('%d/%m/%Y') == datetime.now(date.tzinfo).strftime('%d/%m/%Y'):
+                    if date > datetime.now(date.tzinfo) - timedelta(minutes=30):
+                        job = job_element.text.strip()
+                        link = job_element['href']
+                        location = location_element.text.strip()
                         print(job)
                         print(location)
-                        print(linktxt)
-
+                        print(link)
                         message = f"New Job Offer!\n{job}\n{location}"
-
-                        send_pushover_message(message, linktxt)
-
-    save_offers(todayoffers)
+                        send_pushover_message(message, link)
 
 if __name__ == "__main__":
     check_new_offers()
-    if datetime.now().hour > 21:
-        save_offers([])
-    else:
-        check_new_offers()

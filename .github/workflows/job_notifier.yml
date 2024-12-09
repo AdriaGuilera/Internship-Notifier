@@ -24,20 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Cache todayoffers.json
-        id: cache-todayoffers
-        uses: actions/cache@v3
-        with:
-          path: todayoffers.json
-          key: todayoffers-cache-${{ runner.os }}-${{ hashFiles('todayoffers.json') }}
-        continue-on-error: true
 
       - name: Run Script
         run: python job_notifier.py
 
-      - name: Update todayoffers cache
-        if: steps.cache-todayoffers.outputs.cache-hit != 'true'
-        uses: actions/cache@v3
-        with:
-          path: todayoffers.json
-          key: todayoffers-cache-${{ runner.os }}-${{ hashFiles('todayoffers.json') }}
