@@ -29,7 +29,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: todayoffers.json
-          key: todayoffers-cache
+          key: todayoffers-cache-${{ runner.os }}-${{ hashFiles('todayoffers.json') }}
         continue-on-error: true
 
       - name: Run Script
@@ -40,4 +40,4 @@ jobs:
         uses: actions/cache@v3
         with:
           path: todayoffers.json
-          key: todayoffers-cache
+          key: todayoffers-cache-${{ runner.os }}-${{ hashFiles('todayoffers.json') }}
