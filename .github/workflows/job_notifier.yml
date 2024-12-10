@@ -1,9 +1,9 @@
 name: Job Notifier
 
 on:
-    workflow_dispatch:
-    schedule:
-      - cron: '0,30 9-19 * * *'
+  workflow_dispatch:
+  schedule:
+    - cron: '0,30 9-19 * * *'
 
 jobs:
   run-job-notifier:
