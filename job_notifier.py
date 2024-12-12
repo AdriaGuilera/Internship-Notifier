@@ -41,13 +41,13 @@ def check_new_offers():
                 if date.strftime('%d/%m/%Y') == datetime.now(date.tzinfo).strftime('%d/%m/%Y'):
                     if date > datetime.now(date.tzinfo) - timedelta(minutes=30):
                         job = job_element.text.strip()
-                        link = job_element['href']
+                        link = "https://borsapractiques.fib.upc.edu/ca/ofertes/oferta/" + job_element['href'][-4:]
                         location = location_element.text.strip()
                         print(job)
                         print(location)
                         print(link)
                         message = f"New Job Offer!\n{job}\n{location}"
-                        send_pushover_message(message, link)
+                        #send_pushover_message(message, link)
 
 if __name__ == "__main__":
     check_new_offers()
