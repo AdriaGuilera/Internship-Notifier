@@ -3,7 +3,9 @@ name: Job Notifier
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0,30 9-19 * * *'
+    #from 9:00 to 19:00 every 30 minutes from Monday to Friday
+    - cron: '0,30 9-19 * * 1-5'
+
 
 jobs:
   run-job-notifier:
