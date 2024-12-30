@@ -29,13 +29,11 @@ def check_new_offers():
         if response.status_code != 200:
             print(f"Error accessing the website: {response.status_code}")
             return
-
         soup = BeautifulSoup(response.content, 'lxml')
         for offer in soup.select('.vip-'):
             date_element = offer.select_one('.datetime')
             job_element = offer.select_one('.use-ajax')
             location_element = offer.select_one('.views-field.views-field-address__administrative-area')
-
             if date_element and job_element and location_element:
                 date = datetime.fromisoformat(date_element['datetime'])
                 if date.strftime('%d/%m/%Y') == datetime.now(date.tzinfo).strftime('%d/%m/%Y'):
@@ -47,7 +45,7 @@ def check_new_offers():
                         print(location)
                         print(link)
                         message = f"New Job Offer!\n{job}\n{location}"
-                        #send_pushover_message(message, link)
+                        send_pushover_message(message, link)
 
 if __name__ == "__main__":
     check_new_offers()
