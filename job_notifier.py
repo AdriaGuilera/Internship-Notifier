@@ -1,10 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
+import os
 
 # Pushover API Configuration
-PUSHOVER_USER_KEY = "uqf6qvuwidzjpauuoyauh7vxarj9iq"  # Replace with your Pushover User Key
-PUSHOVER_API_TOKEN = "a4c94cnnjzjhtfkn65jumeqsszydcm"
+PUSHOVER_USER_KEY = os.getenv('PUSH_USER_KEY')
+PUSHOVER_API_TOKEN = os.getenv('PUSH_API_KEY')
 
 # Function to Send Pushover Message
 def send_pushover_message(message, link):
