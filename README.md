@@ -1,6 +1,6 @@
 # Internship Notificator
 
-A Python script that monitors the FIB UPC internship board and sends notifications for new job postings using Pushover.
+A Python script that monitors the FIB UPC internship board through web scrapping and sends notifications for new job postings using Pushover.
 
 ## Features
 
